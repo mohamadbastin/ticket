@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import blog.urls as bu
-#from moarefeticket import settings
+from ticket import settings
 from django.conf.urls.static import static
-#import ticket.urls as tu
+import ticketapp.urls as tu
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include(bu, )),
+    path('ticket/', include(tu)),
 ]
