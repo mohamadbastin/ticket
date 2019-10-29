@@ -7,7 +7,8 @@ urlpatterns = [
     path('hall/', HallListView.as_view()),
     path('res/', SeatReserveView.as_view()),
     path('check/', CheckBought.as_view()),
-    path('red/', SetInvoice.as_view())
+    path('red/', SetInvoice.as_view()),
+    path('majors/', MajorListView.as_view())
 
 ]
 
