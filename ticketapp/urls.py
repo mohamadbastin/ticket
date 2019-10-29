@@ -8,7 +8,8 @@ urlpatterns = [
     path('res/', SeatReserveView.as_view()),
     path('check/', CheckBought.as_view()),
     path('red/', SetInvoice.as_view()),
-    path('majors/', MajorListView.as_view())
+    path('majors/', MajorListView.as_view()),
+    path('signup/', SignupView.as_view())
 
 ]
 
