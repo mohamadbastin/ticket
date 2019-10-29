@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import requests
 from .serializers import *
@@ -122,7 +123,11 @@ class SignupView(CreateAPIView):
         major = Major.objects.get(pk=major)
         phone = data.get('phone')
 
-        temp_user = User.objects.create(username=student_id, password=national_id)
+        try:
+            temp_user = User.objects.create(username=student_id, password=national_id)
+        except:
+            return Response({'text': 'usr exists'}, status=status.HTTP_400_BAD_REQUEST)
+
         temp_profile = Profile.objects.create(name=name, phone=phone, major=major, gender=gender, picture=picture,
                                               student_id=student_id, national_id=national_id, user=temp_user)
 
@@ -161,4 +166,3 @@ class TicketListView:
     pass  # TODO HOW TO RETRIEVE TICKETS BOUGHT BY USER NOT ONLY OWNED BY USER
 
 # TODO CREATE BLACKLIST
-
