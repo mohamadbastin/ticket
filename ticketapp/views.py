@@ -86,7 +86,7 @@ class SetInvoice(CreateAPIView):
         make_response = requests.post(make, data={"api_key": api_key, "amount": amount,
                                                   "return_url": "http%3A%2F%2Fapi.moarefe98.ir%2Fadmin%2F"})
         status = (make_response.json()["status"])
-        
+
         if status == 1:
             invoice_key = (make_response.json()["invoice_key"])
             Invoice.objects.create(terminal=poolam, amount=amount, key=invoice_key, status='w', )
@@ -96,7 +96,7 @@ class SetInvoice(CreateAPIView):
             return HttpResponseRedirect(pay_link)
         else:
             # TODO CANCEL
-        
+
             pass
 
         return Response('done')
@@ -126,7 +126,7 @@ class SignupView(CreateAPIView):
         temp_profile = Profile.objects.create(name=name, phone=phone, major=major, gender=gender, picture=picture,
                                               student_id=student_id, national_id=national_id, user=temp_user)
 
-        return temp_profile
+        return Response(True)
 
 
 class MajorListView(ListAPIView):

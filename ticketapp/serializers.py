@@ -6,6 +6,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = '__all__'
+        read_only_fields = ['user']
 
 
 class SeatSerializer(serializers.ModelSerializer):
@@ -60,4 +61,3 @@ class MajorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Major
         fields = ['pk', 'name']
-
