@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog',
     'ticketapp',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
