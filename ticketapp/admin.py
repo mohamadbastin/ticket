@@ -18,4 +18,6 @@ admin.site.register(Ticket)
 admin.site.register(Terminal)
 admin.site.register(PaymentLinks)
 admin.site.register(Invoice)
+admin.site.register(Major)
+
 
