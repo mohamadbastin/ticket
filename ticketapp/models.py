@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from ticket.settings import MEDIA_ROOT
 
 
 # Create your models here.
@@ -20,12 +21,13 @@ class Major(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(null=True, blank=True)
+    picture = models.ImageField(null=True, blank=True, default='profile.png')
     student_id = models.CharField(max_length=10)
     national_id = models.CharField(max_length=25)
     gender = models.CharField(max_length=2, choices=[('m', 'male'), ('f', 'female')])
     major = models.ForeignKey(Major, on_delete=models.DO_NOTHING, null=True, blank=True)
     phone = models.CharField(max_length=15)
+    email = models.EmailField()
     name = models.CharField(max_length=200)
     qr = models.ImageField(null=True, blank=True)
 
@@ -93,7 +95,7 @@ class Seat(models.Model):
     description = models.CharField(max_length=2048, null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.PROTECT, null=True, blank=True, related_name='seat')
     row = models.ForeignKey('Row', on_delete=models.PROTECT, related_name='seat')
-    owner = models.ManyToManyField(Profile, through='Ticket')
+    owner = models.ManyToManyField(Profile, through='Ticket', through_fields=('seat', 'profile'))
     reserved = models.BooleanField(default=False, )
 
     @property
@@ -114,8 +116,9 @@ class Ticket(models.Model):
         unique_together = ['seat', 'profile']
 
     seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='ticket_owned')
     date = models.DateTimeField(auto_now_add=True)
+    buyer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='ticket_bought')
 
     def __str__(self):
         return str(self.seat) + ' -------> ' + str(self.profile)
@@ -197,4 +200,3 @@ class Invoice(models.Model):
 
     def __str__(self):
         return str(self.key)
-
