@@ -6,12 +6,14 @@ django-cors-headers==3.0.2
 django-jet==1.0.8
 django-phonenumber-field==3.0.1
 djangorestframework==3.9.4
+djangorestframework-simplejwt==4.3.0
 furl==2.0.0
 gunicorn==19.9.0
 idna==2.8
 orderedmultidict==1.0
 phonenumbers==8.10.13
 Pillow==6.0.0
+PyJWT==1.7.1
 pytz==2019.1
 requests==2.22.0
 six==1.12.0
