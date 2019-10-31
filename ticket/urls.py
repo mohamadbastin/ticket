@@ -22,11 +22,16 @@ from django.conf.urls.static import static
 import ticketapp.urls as tu
 from ticketapp.views import *
 from rest_framework.authtoken import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include(bu, )),
-    url(r'^api-token-auth/', views.obtain_auth_token),
+    url(r'^api-token-auth/', TokenObtainPairView.as_view()),
     path('ticket/', include(tu)),
 ]
 
