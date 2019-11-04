@@ -2,7 +2,7 @@ import requests
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, ListAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -69,19 +69,16 @@ class HallListView(ListAPIView):
         return Hall.objects.all()
 
 
-class CheckBought(GenericAPIView):
-    def post(self, request):
-        id = self.request.data.get('id', None)
+class CheckBought(ListAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [IsAuthenticated]
 
-        if id:
-            try:
-                usr = User.objects.get(username=id)
-            except:
-                return Response('user does not exist')
-            user = Profile.objects.get(user=usr)
-            t = Ticket.objects.filter(profile=user)
-            if t:
-                return Response(False)
+    def get(self, request, *args, **kwargs):
+        usr = self.request.user
+        user = Profile.objects.get(user=usr)
+        t = Ticket.objects.filter(profile=user)
+        if t:
+            return Response(False)
 
         return Response(True)
 
@@ -141,6 +138,22 @@ class SeatReserveView(CreateAPIView):
                 return Response(msg, status=status.HTTP_200_OK)
         msg = {'msg': 'این صندلی قبلا فروخته شده. لطفا صفحه را رفرش کنید.'}
         return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ReservationListView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ReservationSerializer
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        res = Reservation.objects.get(profile=profile)
+        seat = res.seat
+        invoice = res.invoice
+        msg = {'msg': 'صندلی شما رزور شد.', 'amount': invoice.amount, 'pk': invoice.pk,
+               'profile': {'name': profile.name},
+               'seat': {'block': seat.row.block.name, 'row': seat.row.number, 'seat': seat.number}}
+        return Response(msg, status=status.HTTP_200_OK)
 
 
 class BuyTicketView(CreateAPIView):
@@ -273,7 +286,20 @@ class BlockListView(ListAPIView):
 
 
 # TODO SHOW TICKETS
-class TicketListView:
-    pass
+class TicketListView(ListAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+
+        a = Ticket.objects.get(profile=profile)
+        s = a.seat
+        pp = ProfileSerializer(instance=profile).data
+
+        return Response({'ticket': {'id': a.pk, 'date': a.date,
+                                    'seat': {'number': s.number, 'row': s.row.number,
+                                             'block': s.row.block.name}, 'profile': pp}})
 
 # TODO CREATE BLACKLIST
