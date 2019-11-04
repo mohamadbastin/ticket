@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from ticket.settings import MEDIA_ROOT
 
 
 # Create your models here.
@@ -24,8 +23,8 @@ class Profile(models.Model):
     picture = models.ImageField(null=True, blank=True, default='profile.png')
     student_id = models.CharField(max_length=10)
     national_id = models.CharField(max_length=25)
-    gender = models.CharField(max_length=2, choices=[('m', 'male'), ('f', 'female')])
-    major = models.ForeignKey(Major, on_delete=models.DO_NOTHING, null=True, blank=True)
+    gender = models.CharField(max_length=2, choices=[('m', 'male'), ('f', 'female'), ('t', 'trans')])
+    major = models.ForeignKey(Major, on_delete=models.SET_NULL, null=True, blank=True)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
     name = models.CharField(max_length=200)
@@ -65,11 +64,11 @@ class UserService(models.Model):
 
 
 class Price(models.Model):
-    title = models.CharField(max_length=127)
+    name = models.CharField(max_length=127)
     price = models.IntegerField()
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Ad(models.Model):
@@ -86,6 +85,7 @@ class Seat(models.Model):
         unique_together = ['number', 'row']
         ordering = ['row', 'number', ]
 
+    status_choices = [('A', 'Available'), ('S', 'Sold'), ('M', 'Mine'), ('N', 'Not_Visible')]
     # block = models.CharField(max_length=128)
     # gender = models.CharField(max_length=2, choices=[('f', 'female'), ('m', 'male')])
     # row = models.IntegerField()
@@ -96,14 +96,7 @@ class Seat(models.Model):
     ad = models.ForeignKey(Ad, on_delete=models.PROTECT, null=True, blank=True, related_name='seat')
     row = models.ForeignKey('Row', on_delete=models.PROTECT, related_name='seat')
     owner = models.ManyToManyField(Profile, through='Ticket', through_fields=('seat', 'profile'))
-    reserved = models.BooleanField(default=False, )
-
-    @property
-    def sold(self):
-        a = Ticket.objects.filter(seat=self)
-        if a:
-            return True
-        return False
+    status = models.CharField(default='A', choices=status_choices, max_length=2)
 
     # owner = models.OneToOneField(Profile, on_delete=models.PROTECT, null=True, blank=True)
 
@@ -118,7 +111,8 @@ class Ticket(models.Model):
     seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='ticket_owned')
     date = models.DateTimeField(auto_now_add=True)
-    buyer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='ticket_bought')
+    # buyer = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name='ticket_bought')
+    pdf = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return str(self.seat) + ' -------> ' + str(self.profile)
@@ -143,7 +137,7 @@ class Block(models.Model):
         unique_together = ['name', 'gender', 'hall']
 
     name = models.CharField(max_length=127)
-    gender = models.CharField(max_length=2, choices=[('f', 'female'), ('m', 'male')])
+    gender = models.CharField(max_length=2, choices=[('f', 'female'), ('m', 'male'), ('t', 'trans')])
     # row = models.ForeignKey(Row, on_delete=models.PROTECT)
     hall = models.ForeignKey('Hall', on_delete=models.PROTECT, related_name='block')
 
@@ -175,6 +169,8 @@ class HallEvent(models.Model):
 class Terminal(models.Model):
     name = models.CharField(max_length=50)
     api_key = models.CharField(max_length=1000)
+    token = models.CharField(max_length=100000, null=True, blank=True)
+    # boz = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -183,20 +179,44 @@ class Terminal(models.Model):
 class PaymentLinks(models.Model):
     name = models.CharField(max_length=100)
     link = models.CharField(max_length=1000)
-    terminal = models.ForeignKey(Terminal, on_delete=models.DO_NOTHING)
+    terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
 
 
 class Invoice(models.Model):
-    terminal = models.ForeignKey(Terminal, on_delete=models.DO_NOTHING)
+    # class Meta:
+    # unique_together = ['key', ]
+
+    date = models.DateTimeField(auto_now_add=True)
+    terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT)
     amount = models.PositiveIntegerField()
     key = models.CharField(max_length=1000, blank=True, null=True)
     status = models.CharField(max_length=100, choices=[('f', 'false'), ('w', 'waiting'), ('t', 'true')], blank=True,
                               null=True)
     payment_id = models.CharField(max_length=1000, null=True, blank=True)
     error = models.CharField(max_length=100, null=True, blank=True)
+    reservation = models.ForeignKey('Reservation', on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name='invoice')
+    ticket = models.ForeignKey(Ticket, on_delete=models.SET_NULL, null=True, blank=True, related_name='invoice')
 
     def __str__(self):
         return str(self.key)
+
+
+class Reservation(models.Model):
+    class Meta:
+        unique_together = ['seat', 'profile']
+
+    seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='reservation_owned')
+    date = models.DateTimeField(auto_now_add=True)
+    # buyer = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name='reservation_bought')
+    res_date_time = models.DateTimeField(auto_now_add=True)
+    # pay_date_time = models.DateTimeField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
+    ticket = models.ForeignKey(Ticket, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.seat) + ' -------> ' + str(self.profile)

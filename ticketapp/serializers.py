@@ -10,11 +10,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class SeatSerializer(serializers.ModelSerializer):
-    owner = ProfileSerializer(many=True)
+    # owner = ProfileSerializer(many=True)
 
     class Meta:
         model = Seat
-        fields = ['pk', 'number', 'title', 'price', 'description', 'ad', 'sold', 'reserved', 'owner']
+        fields = ['pk', 'number', 'title', 'price', 'description', 'ad', 'status']
 
 
 class RowSerializer(serializers.ModelSerializer):

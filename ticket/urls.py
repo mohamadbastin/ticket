@@ -21,7 +21,7 @@ from ticket import settings
 from django.conf.urls.static import static
 import ticketapp.urls as tu
 from ticketapp.views import *
-from rest_framework.authtoken import views
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
