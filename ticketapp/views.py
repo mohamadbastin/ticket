@@ -304,7 +304,7 @@ class SignupView(CreateAPIView):
 
         try:
             passw = "arghavan" + str(national_id)[-3:]
-            temp_user = User.objects.create(username=student_id,)
+            temp_user = User.objects.create(username=student_id, )
             temp_user.set_password(national_id)
             temp_user.save()
         except:
@@ -339,10 +339,6 @@ class BlockListView(ListAPIView):
     queryset = Block.objects.all()
 
 
-# TODO ASSIGN SEATS AND CREATE TICKETS
-
-
-# TODO SHOW TICKETS
 class TicketListView(ListAPIView):
     serializer_class = TicketSerializer
     permission_classes = [IsAuthenticated]
@@ -350,14 +346,16 @@ class TicketListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         profile = Profile.objects.get(user=user)
+        try:
+            a = Ticket.objects.get(profile=profile)
+            s = a.seat
+            pp = ProfileSerializer(instance=profile).data
 
-        a = Ticket.objects.get(profile=profile)
-        s = a.seat
-        pp = ProfileSerializer(instance=profile).data
-
-        return Response({'ticket': {'id': a.pk, 'date': a.date,
-                                    'seat': {'number': s.number, 'row': s.row.number,
-                                             'block': s.row.block.name}, 'profile': pp}})
+            return Response({'ticket': {'id': a.pk, 'date': a.date,
+                                        'seat': {'number': s.number, 'row': s.row.number,
+                                                 'block': s.row.block.name}, 'profile': pp}}, status=status.HTTP_200_OK)
+        except:
+            return Response({'msg': 'شما بلیت ندارید.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # TODO CREATE BLACKLIST
