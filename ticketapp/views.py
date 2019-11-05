@@ -310,7 +310,7 @@ class SignupView(CreateAPIView):
             return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
 
         temp_profile = Profile.objects.create(name=name, phone=phone, gender='t',
-                                              student_id=student_id, national_id=national_id, user=temp_user)
+                                              student_id=student_id, national_id=0, user=temp_user)
 
         return Response({'msg': 'کاربر ساخته شد.'}, status=status.HTTP_200_OK)
 
