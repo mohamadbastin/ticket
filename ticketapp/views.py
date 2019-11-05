@@ -104,7 +104,8 @@ def set_invoice(profile):
         make_response = requests.post(make, data={"api_key": api_key, "amount": amount,
                                                   "return_url": "http%3A%2F%2Fapi.moarefe98.ir%2Fadmin%2F"})
         status = (make_response.json()["status"])
-
+        print(1)
+        print(status)
         if status == 1:
             invoice_key = (make_response.json()["invoice_key"])
             a = Invoice.objects.create(terminal=poolam, amount=amount, key=invoice_key, status='w', )
