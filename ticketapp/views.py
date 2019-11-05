@@ -5,8 +5,9 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 # Create your views here.
+from rest_framework.views import APIView
+
 from .serializers import *
 
 make = PaymentLinks.objects.get(name='make').link
@@ -55,16 +56,22 @@ class HallListView(ListAPIView):
         for i in res:
             if not i.is_deleted:
                 if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
+                    print("heree")
                     i.is_deleted = True
+                    s = i.seat
+                    s.status = 'A'
+                    s.save()
                     i.save()
         for i in res:
             if i.is_deleted:
-                i.seat.status = 'A'
-                i.save()
+                s = i.seat
+                s.status = 'A'
+                s.save()
         for i in res:
             if not i.is_deleted and i.profile == profile:
-                i.seat.status = 'M'
-                i.save()
+                s = i.seat
+                s.status = 'M'
+                s.save()
 
         return Hall.objects.all()
 
@@ -101,10 +108,12 @@ def set_invoice(profile):
         return a
 
     else:
+        # token
+        url = "http%3A%2F%2Fmoarefe98.ir%2Fticket%2Fpayment%2Fgateway%2Fcallback%2F%3Ftoken%3D" + token
         make_response = requests.post(make, data={"api_key": api_key, "amount": amount,
-                                                  "return_url": "http%3A%2F%2Fapi.moarefe98.ir%2Fadmin%2F"})
+                                                  "return_url": ""})
         status = (make_response.json()["status"])
-        print(1)
+        # print(1)
         print(status)
         if status == 1:
             invoice_key = (make_response.json()["invoice_key"])
@@ -171,7 +180,11 @@ class BuyTicketView(CreateAPIView):
         profile = Profile.objects.get(user=user)
         pk = request.data.get('pk', None)
         if pk:
-            invoice = Invoice.objects.get(pk=pk)
+            # invoice = Invoice.objects.get(pk=pk)
+            res = Reservation.objects.get(profile=profile)
+            if res.is_deleted:
+                return HttpResponseRedirect('http://moarefe98.ir/ticket/')
+            invoice = Invoice.objects.get(reservation=res)
             if invoice.key == 'free':
                 a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
                 s = invoice.reservation.seat
@@ -188,13 +201,17 @@ class BuyTicketView(CreateAPIView):
                 # ss = SeatSerializer(instance=s).data
                 pp = ProfileSerializer(instance=profile).data
 
-                return Response({'ticket': {'id': a.pk, 'date': a.date,
-                                            'seat': {'number': s.number, 'row': s.row.number,
-                                                     'block': s.row.block.name}, 'profile': pp}})
+                return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
+
+                # return Response({'ticket': {'id': a.pk, 'date': a.date,
+                #                             'seat': {'number': s.number, 'row': s.row.number,
+                #                                      'block': s.row.block.name}, 'profile': pp}})
 
             else:
                 amount = invoice.amount
                 key = invoice.key
+
+
 
         msg = {'msg': 'مشکلی پیش آمده'}
         return Response(msg, status=status.HTTP_404_NOT_FOUND)
@@ -308,4 +325,13 @@ class TicketListView(ListAPIView):
                                     'seat': {'number': s.number, 'row': s.row.number,
                                              'block': s.row.block.name}, 'profile': pp}})
 
+
 # TODO CREATE BLACKLIST
+
+
+class TestView(APIView):
+    serializer_class = TicketSerializer
+
+    def get(self, request, *args, **kwargs):
+        tk = self.request.GET.get('token')
+        return Response({})

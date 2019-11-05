@@ -14,6 +14,7 @@ urlpatterns = [
     path('majors/', MajorListView.as_view()),
     path('signup/', SignupView.as_view()),
     path('reservation/', ReservationListView.as_view()),
-    path('ticket/', TicketListView.as_view())
+    path('ticket/', TicketListView.as_view()),
+    path('test/', TestView.as_view())
 
 ]
