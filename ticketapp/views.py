@@ -158,6 +158,10 @@ class ReservationListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         profile = Profile.objects.get(user=user)
+        l = Reservation.objects.filter(profile=profile, is_deleted=False)
+        for i in l:
+            i.is_deleted = True
+            i.save()
         res = Reservation.objects.get(profile=profile)
         seat = res.seat
         invoice = res.invoice.first()
@@ -181,7 +185,7 @@ class BuyTicketView(CreateAPIView):
         pk = request.data.get('pk', None)
         if pk:
             # invoice = Invoice.objects.get(pk=pk)
-            res = Reservation.objects.get(profile=profile)
+            res = Reservation.objects.get(profile=profile, is_deleted=False)
             if res.is_deleted:
                 return HttpResponseRedirect('http://moarefe98.ir/ticket/')
             invoice = Invoice.objects.get(reservation=res)
@@ -199,10 +203,10 @@ class BuyTicketView(CreateAPIView):
                 b.save()
 
                 # ss = SeatSerializer(instance=s).data
-                pp = ProfileSerializer(instance=profile).data
+                # pp = ProfileSerializer(instance=profile).data
 
-                # return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
-                return HttpResponseRedirect('http://google.com/')
+                return Response({'msg': 'پرداخت انجام شد.'}, status=status.HTTP_200_OK)
+                # return HttpResponseRedirect('http://google.com/')
                 # return Response({'ticket': {'id': a.pk, 'date': a.date,
                 #                             'seat': {'number': s.number, 'row': s.row.number,
                 #                                      'block': s.row.block.name}, 'profile': pp}})
