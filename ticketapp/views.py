@@ -303,7 +303,8 @@ class SignupView(CreateAPIView):
         phone = data.get('phone', None)
 
         try:
-            temp_user = User.objects.create(username=student_id, password=national_id)
+            passw = str(national_id) + "pass"
+            temp_user = User.objects.create(username=student_id, password=passw)
         except:
             msg = 'این کاربر قبلا ثبت نام شده!'
             return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
