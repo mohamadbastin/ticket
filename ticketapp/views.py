@@ -234,8 +234,10 @@ class BuyTicket2View(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         tk = self.request.GET.get('token', None)
-        # in_key = self.request.data.get('id', None)
-        print(self.request.data)
+        in_key = self.request.data.get('invoice_key', None)
+        # print(self.request.data)
+        print(tk)
+        print(in_key)
         return Response({})
         # if tk == token:
         #     invoice = Invoice.objects.get(key=in_key)
