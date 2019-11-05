@@ -110,7 +110,6 @@ def set_invoice(profile):
             i.save()
         a = Invoice.objects.create(terminal=poolam, amount=amount, key='free', status='w', profile=profile)
         return a
-
     else:
         # token
         url = "http%3A%2F%2Fticket.moarefe98.ir%2Fticket%2Fpayment%2Fgateway%2Fcallback%2F%3Ftoken%3D" + token
@@ -141,6 +140,9 @@ class SeatReserveView(CreateAPIView):
             profile = Profile.objects.get(user=user)
         except:
             return Response({'msg': 'user not valid'}, status=status.HTTP_401_UNAUTHORIZED)
+        t = Ticket.objects.filter(profile=profile)
+        if t:
+            return Response({'msg': 'شما بلیت دارید.'}, status=status.HTTP_401_UNAUTHORIZED)
         if a:
             l = Reservation.objects.filter(profile=profile, is_deleted=False)
             for i in l:
