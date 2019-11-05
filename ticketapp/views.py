@@ -298,20 +298,20 @@ class SignupView(CreateAPIView):
         name = data.get('name', None)
         picture = data.get('picture', None)
         gender = data.get('gender', None)
-        major = data.get('major', None)
-        major = Major.objects.get(pk=major)
+        # major = data.get('major', None)
+        # major = Major.objects.get(pk=major)
         phone = data.get('phone', None)
 
         try:
             temp_user = User.objects.create(username=student_id, password=national_id)
         except:
             msg = 'این کاربر قبلا ثبت نام شده!'
-            return Response(msg, status=status.HTTP_409_CONFLICT)
+            return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
 
-        temp_profile = Profile.objects.create(name=name, phone=phone, major=major, gender=gender, picture=picture,
+        temp_profile = Profile.objects.create(name=name, phone=phone, gender='t',
                                               student_id=student_id, national_id=national_id, user=temp_user)
 
-        return Response(True, status=status.HTTP_200_OK)
+        return Response({'msg': 'کاربر ساخته شد.'}, status=status.HTTP_200_OK)
 
 
 class MajorListView(ListAPIView):
