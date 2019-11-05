@@ -152,6 +152,7 @@ class ReservationListView(ListAPIView):
         seat = res.seat
         invoice = res.invoice
         print(invoice)
+        print(invoice.key)
         msg = {'msg': 'صندلی شما رزور شد.', 'amount': invoice.amount, 'pk': invoice.pk,
                'profile': {'name': profile.name, 'student_id': profile.student_id, 'phone': profile.phone},
                'seat': {'block': seat.row.block.name, 'row': seat.row.number, 'seat': seat.number}}
