@@ -209,8 +209,8 @@ class Reservation(models.Model):
     class Meta:
         unique_together = ['seat', 'profile']
 
-    seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='reservation_owned')
+    seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reservation_owned')
     date = models.DateTimeField(auto_now_add=True)
     # buyer = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name='reservation_bought')
     res_date_time = models.DateTimeField(auto_now_add=True)
