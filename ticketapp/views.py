@@ -242,6 +242,9 @@ class BuyTicket2View(CreateAPIView):
         # print(tk)
         # print(in_key)
         # return Response({})
+        print(tk)
+        print(token)
+        print(tk==token)
         if tk == token:
             invoice = Invoice.objects.get(key=in_key)
 
