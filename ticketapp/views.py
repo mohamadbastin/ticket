@@ -128,6 +128,7 @@ class SeatReserveView(CreateAPIView):
             if seat.status == 'A' or seat.status == 'M':
                 res = Reservation.objects.create(seat=seat, profile=profile, )
                 invoice = set_invoice(profile)
+                print(invoice)
                 invoice.reservation = res
                 invoice.save()
                 seat.status = 'S'
@@ -150,8 +151,9 @@ class ReservationListView(ListAPIView):
         res = Reservation.objects.get(profile=profile)
         seat = res.seat
         invoice = res.invoice
+        print(invoice)
         msg = {'msg': 'صندلی شما رزور شد.', 'amount': invoice.amount, 'pk': invoice.pk,
-               'profile': {'name': profile.name},
+               'profile': {'name': profile.name, 'student_id': profile.student_id, 'phone': profile.phone},
                'seat': {'block': seat.row.block.name, 'row': seat.row.number, 'seat': seat.number}}
         return Response(msg, status=status.HTTP_200_OK)
 
