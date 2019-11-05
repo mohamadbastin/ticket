@@ -95,6 +95,18 @@ REST_FRAMEWORK = {
     )
 }
 
+AUTH_PASSWORD_VALIDATORS = [
+
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6,
+        }
+    },
+
+
+]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=501),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=100),
