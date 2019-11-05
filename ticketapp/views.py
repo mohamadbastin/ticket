@@ -222,6 +222,9 @@ class BuyTicketView(CreateAPIView):
             else:
                 amount = invoice.amount
                 key = invoice.key
+                res = invoice.reservation
+                res.res_date_time = timezone.now()
+                res.save()
                 return Response({'key': key}, status=status.HTTP_202_ACCEPTED)
 
         msg = {'msg': 'مشکلی پیش آمده'}
@@ -236,35 +239,28 @@ class BuyTicket2View(CreateAPIView):
         tk = self.request.GET.get('token', None)
         in_key = self.request.data.get('invoice_key', None)
         # print(self.request.data)
-        print(tk)
-        print(in_key)
-        return Response({})
-        # if tk == token:
-        #     invoice = Invoice.objects.get(key=in_key)
-        #     # try:
-        #     #     invoice = Invoice.objects.get(key=in_key)
-        #     # except:
-        #     #     return HttpResponseRedirect('http://google.com/')
-        #     status = request.data.get('status')
-        #     if status == 1:
-        #         a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
-        #         s = invoice.reservation.seat
-        #         s.status = 'S'
-        #         s.save()
-        #         invoice.status = 't'
-        #         invoice.ticket = a
-        #         invoice.save()
-        #         b = invoice.reservation
-        #         b.ticket = a
-        #         b.is_deleted = True
-        #         b.save()
-        #
-        #
-        #
-        #     else:
-        #         HttpResponseRedirect('http://google.com/')
-        # else:
-        #     return HttpResponseRedirect('http://google.com/')
+        # print(tk)
+        # print(in_key)
+        # return Response({})
+        if tk == token:
+            invoice = Invoice.objects.get(key=in_key)
+
+            a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
+            s = invoice.reservation.seat
+            s.status = 'S'
+            s.save()
+            invoice.status = 't'
+            invoice.ticket = a
+            invoice.save()
+            b = invoice.reservation
+            b.ticket = a
+            b.is_deleted = True
+            b.save()
+
+            return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf.html")
+
+        else:
+            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
 
 
 # class CheckPayView(CreateAPIView):
