@@ -237,7 +237,10 @@ class BuyTicket2View(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         tk = self.request.GET.get('token', None)
-        in_key = self.request.data.get('invoice_key', None)
+        try:
+            in_key = self.request.data.get('invoice_key', None)
+        except:
+            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
         # print(self.request.data)
         # print(tk)
         # print(in_key)
