@@ -17,7 +17,7 @@ class PriceSerializer(serializers.ModelSerializer):
 
 
 class SeatSerializer(serializers.ModelSerializer):
-    price = PriceSerializer(many=True)
+    price = PriceSerializer()
 
     class Meta:
         model = Seat
