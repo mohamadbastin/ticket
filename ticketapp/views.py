@@ -330,8 +330,9 @@ class TicketListView(ListAPIView):
 
 
 class TestView(APIView):
-    serializer_class = TicketSerializer
+    serializer_class = MajorSerializer
 
-    def get(self, request, *args, **kwargs):
-        tk = self.request.GET.get('token')
-        return Response({})
+    def post(self, request, *args, **kwargs):
+        # tk = self.request.GET.get('token')
+
+        return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
