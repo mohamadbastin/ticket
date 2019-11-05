@@ -113,7 +113,7 @@ def set_invoice(profile):
 
     else:
         # token
-        url = "http%3A%2F%2Fmoarefe98.ir%2Fticket%2Fpayment%2Fgateway%2Fcallback%2F%3Ftoken%3D" + token
+        url = "http%3A%2F%2Fticket.moarefe98.ir%2Fticket%2Fpayment%2Fgateway%2Fcallback%2F%3Ftoken%3D" + token
         make_response = requests.post(make, data={"api_key": api_key, "amount": amount,
                                                   "return_url": url})
         status = (make_response.json()["status"])
