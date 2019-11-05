@@ -246,32 +246,38 @@ class BuyTicket2View(CreateAPIView):
             in_key = self.request.data.get('invoice_key', None)
         except:
             return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
-        # print(self.request.data)
+        print(self.request.data)
         # print(tk)
         # print(in_key)
         # return Response({})
         print(tk)
         print(token)
         print(tk in token)
-        if tk in token:
-            invoice = Invoice.objects.get(key=in_key)
 
-            a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
-            s = invoice.reservation.seat
-            print('s: ', s, 's.s: ', s.status)
-            s.status = 'S'
-            s.save()
-            print('s: ', s, 's.s: ', s.status)
-            invoice.status = 't'
-            invoice.ticket = a
-            invoice.save()
-            b = invoice.reservation
-            b.ticket = a
-            b.is_deleted = True
-            b.save()
+        make_response = requests.post(check + str(in_key), data={"api_key": api_key})
+        status = (make_response.json()["status"])
+        if status == 1:
+            if tk in token:
+                invoice = Invoice.objects.get(key=in_key)
 
-            return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf.html")
+                a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
+                s = invoice.reservation.seat
+                print('s: ', s, 's.s: ', s.status)
+                s.status = 'S'
+                s.save()
+                print('s: ', s, 's.s: ', s.status)
+                invoice.status = 't'
+                invoice.ticket = a
+                invoice.save()
+                b = invoice.reservation
+                b.ticket = a
+                b.is_deleted = True
+                b.save()
 
+                return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf.html")
+
+            else:
+                return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
         else:
             return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
 
