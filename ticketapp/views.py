@@ -303,7 +303,7 @@ class SignupView(CreateAPIView):
         phone = data.get('phone', None)
 
         try:
-            passw = "pass" + str(national_id) + "pass"
+            passw = str(national_id)
             temp_user = User.objects.create(username=student_id, password=passw)
         except:
             msg = 'این کاربر قبلا ثبت نام شده!'
