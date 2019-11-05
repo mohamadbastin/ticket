@@ -192,6 +192,7 @@ class Invoice(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT)
     amount = models.PositiveIntegerField()
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     key = models.CharField(max_length=1000, blank=True, null=True)
     status = models.CharField(max_length=100, choices=[('f', 'false'), ('w', 'waiting'), ('t', 'true')], blank=True,
                               null=True)
@@ -200,14 +201,15 @@ class Invoice(models.Model):
     reservation = models.ForeignKey('Reservation', on_delete=models.SET_NULL, null=True, blank=True,
                                     related_name='invoice')
     ticket = models.ForeignKey(Ticket, on_delete=models.SET_NULL, null=True, blank=True, related_name='invoice')
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.key)
 
 
 class Reservation(models.Model):
-    class Meta:
-        unique_together = ['seat', 'profile']
+    # class Meta:
+        # unique_together = ['seat', 'profile', ]
 
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reservation_owned')

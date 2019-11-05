@@ -104,7 +104,11 @@ def set_invoice(profile):
     amount = get_amount(profile)
     if amount == 'free':
         amount = 0
-        a = Invoice.objects.create(terminal=poolam, amount=amount, key='free', status='w')
+        l = Invoice.objects.filter(profile=profile, is_deleted=False)
+        for i in l:
+            i.is_deleted = True
+            i.save()
+        a = Invoice.objects.create(terminal=poolam, amount=amount, key='free', status='w', profile=profile)
         return a
 
     else:
@@ -117,7 +121,11 @@ def set_invoice(profile):
         print(status)
         if status == 1:
             invoice_key = (make_response.json()["invoice_key"])
-            a = Invoice.objects.create(terminal=poolam, amount=amount, key=invoice_key, status='w', )
+            l = Invoice.objects.filter(profile=profile, is_deleted=False)
+            for i in l:
+                i.is_deleted = True
+                i.save()
+            a = Invoice.objects.create(terminal=poolam, amount=amount, key=invoice_key, status='w', profile=profile)
             return a
 
 
@@ -187,8 +195,8 @@ class BuyTicketView(CreateAPIView):
             # invoice = Invoice.objects.get(pk=pk)
             res = Reservation.objects.get(profile=profile, is_deleted=False)
             if res.is_deleted:
-                return HttpResponseRedirect('http://moarefe98.ir/ticket/')
-            invoice = Invoice.objects.get(reservation=res)
+                return Response({'msg': 'صفحه را رفرش کنید.'}, status=status.HTTP_404_NOT_FOUND)
+            invoice = Invoice.objects.get(reservation=res, is_deleted=False)
             if invoice.key == 'free':
                 a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
                 s = invoice.reservation.seat
@@ -214,8 +222,7 @@ class BuyTicketView(CreateAPIView):
             else:
                 amount = invoice.amount
                 key = invoice.key
-
-
+                return Response({'key': key}, status=status.HTTP_202_ACCEPTED)
 
         msg = {'msg': 'مشکلی پیش آمده'}
         return Response(msg, status=status.HTTP_404_NOT_FOUND)
