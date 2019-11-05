@@ -151,7 +151,7 @@ class ReservationListView(ListAPIView):
         profile = Profile.objects.get(user=user)
         res = Reservation.objects.get(profile=profile)
         seat = res.seat
-        invoice = res.invoice
+        invoice = res.invoice.first()
         print(res)
         print(ReservationSerializer(instance=res).data)
         print(invoice)
