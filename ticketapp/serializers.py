@@ -10,8 +10,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
 
+class PriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = '__all__'
+
+
 class SeatSerializer(serializers.ModelSerializer):
-    # owner = ProfileSerializer(many=True)
+    price = PriceSerializer(many=True)
 
     class Meta:
         model = Seat
