@@ -51,7 +51,10 @@ class HallListView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         profile = Profile.objects.get(user=user)
-
+        c = 1
+        t = Ticket.objects.filter(profile=profile)
+        if t:
+            c = 0
         res = Reservation.objects.all()
         for i in res:
             if not i.is_deleted:
@@ -63,7 +66,7 @@ class HallListView(ListAPIView):
                     s.save()
                     i.save()
         for i in res:
-            if i.is_deleted:
+            if i.is_deleted and c:
                 s = i.seat
                 s.status = 'A'
                 s.save()
