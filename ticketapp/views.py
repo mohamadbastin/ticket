@@ -233,33 +233,36 @@ class BuyTicket2View(CreateAPIView):
     serializer_class = TicketSerializer
 
     def post(self, request, *args, **kwargs):
-        tk = self.request.data.get('token', None)
-        in_key = self.request.data.get('id', None)
-        if tk == token:
-            try:
-                invoice = Invoice.objects.get(key=in_key)
-            except:
-                return HttpResponseRedirect('http://google.com/')
-            status = request.data.get('status')
-            if status == 1:
-                a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
-                s = invoice.reservation.seat
-                s.status = 'S'
-                s.save()
-                invoice.status = 't'
-                invoice.ticket = a
-                invoice.save()
-                b = invoice.reservation
-                b.ticket = a
-                b.is_deleted = True
-                b.save()
-
-
-
-            else:
-                HttpResponseRedirect('http://google.com/')
-        else:
-            return HttpResponseRedirect('http://google.com/')
+        tk = self.request.GET.get('token', None)
+        # in_key = self.request.data.get('id', None)
+        print(self.request.data)
+        return Response({})
+        # if tk == token:
+        #     invoice = Invoice.objects.get(key=in_key)
+        #     # try:
+        #     #     invoice = Invoice.objects.get(key=in_key)
+        #     # except:
+        #     #     return HttpResponseRedirect('http://google.com/')
+        #     status = request.data.get('status')
+        #     if status == 1:
+        #         a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
+        #         s = invoice.reservation.seat
+        #         s.status = 'S'
+        #         s.save()
+        #         invoice.status = 't'
+        #         invoice.ticket = a
+        #         invoice.save()
+        #         b = invoice.reservation
+        #         b.ticket = a
+        #         b.is_deleted = True
+        #         b.save()
+        #
+        #
+        #
+        #     else:
+        #         HttpResponseRedirect('http://google.com/')
+        # else:
+        #     return HttpResponseRedirect('http://google.com/')
 
 
 # class CheckPayView(CreateAPIView):
