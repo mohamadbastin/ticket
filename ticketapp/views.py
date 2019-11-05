@@ -134,9 +134,13 @@ class SeatReserveView(CreateAPIView):
         except:
             return Response({'msg': 'user not valid'}, status=status.HTTP_401_UNAUTHORIZED)
         if a:
+            l = Reservation.objects.filter(profile=profile, is_deleted=False)
+            for i in l:
+                i.is_deleted = True
+                i.save()
             seat = Seat.objects.get(pk=a)
             if seat.status == 'A' or seat.status == 'M':
-                res = Reservation.objects.create(seat=seat, profile=profile, )
+                res = Reservation.objects.create(seat=seat, profile=profile)
                 invoice = set_invoice(profile)
                 print(invoice)
                 invoice.reservation = res
@@ -158,10 +162,6 @@ class ReservationListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         profile = Profile.objects.get(user=user)
-        l = Reservation.objects.filter(profile=profile, is_deleted=False)
-        for i in l:
-            i.is_deleted = True
-            i.save()
         res = Reservation.objects.get(profile=profile)
         seat = res.seat
         invoice = res.invoice.first()
