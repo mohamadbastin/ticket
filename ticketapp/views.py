@@ -303,14 +303,14 @@ class SignupView(CreateAPIView):
         phone = data.get('phone', None)
 
         try:
-            passw = "12pass" + str(national_id) + "pass12"
+            passw = "arghavan" + str(national_id)[-3:]
             temp_user = User.objects.create(username=student_id, password=passw)
         except:
             msg = 'این کاربر قبلا ثبت نام شده!'
             return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
 
         temp_profile = Profile.objects.create(name=name, phone=phone, gender='t',
-                                              student_id=student_id, national_id=0, user=temp_user)
+                                              student_id=student_id, national_id=national_id, user=temp_user)
 
         return Response({'msg': 'کاربر ساخته شد.'}, status=status.HTTP_200_OK)
 
