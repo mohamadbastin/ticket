@@ -170,7 +170,7 @@ class ReservationListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         profile = Profile.objects.get(user=user)
-        res = Reservation.objects.get(profile=profile)
+        res = Reservation.objects.get(profile=profile, is_deleted=False)
         seat = res.seat
         invoice = res.invoice.first()
         print(res)
