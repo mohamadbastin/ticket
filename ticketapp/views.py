@@ -236,7 +236,7 @@ class BuyTicket2View(CreateAPIView):
     serializer_class = TicketSerializer
 
     def post(self, request, *args, **kwargs):
-        # tk = self.request.GET.get('token', None)
+        tk = self.request.GET.get('token', None)
         try:
             in_key = self.request.data.get('invoice_key', None)
         except:
@@ -245,9 +245,9 @@ class BuyTicket2View(CreateAPIView):
         # print(tk)
         # print(in_key)
         # return Response({})
-        # print(tk)
-        # print(token)
-        # print(tk==token)
+        print(tk)
+        print(token)
+        print(tk==token)
         if 1:
             invoice = Invoice.objects.get(key=in_key)
 
