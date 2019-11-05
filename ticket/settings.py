@@ -55,7 +55,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-
+# Access-Control-Allow-Origin: *
 ROOT_URLCONF = 'ticket.urls'
 
 TEMPLATES = [
