@@ -247,14 +247,16 @@ class BuyTicket2View(CreateAPIView):
         # return Response({})
         print(tk)
         print(token)
-        print(tk==token)
-        if 1:
+        print(tk in token)
+        if tk in token:
             invoice = Invoice.objects.get(key=in_key)
 
             a = Ticket.objects.create(seat=invoice.reservation.seat, profile=invoice.reservation.profile)
             s = invoice.reservation.seat
+            print('s: ', s, 's.s: ', s.status)
             s.status = 'S'
             s.save()
+            print('s: ', s, 's.s: ', s.status)
             invoice.status = 't'
             invoice.ticket = a
             invoice.save()
