@@ -152,6 +152,8 @@ class ReservationListView(ListAPIView):
         res = Reservation.objects.get(profile=profile)
         seat = res.seat
         invoice = res.invoice
+        print(res)
+        print(ReservationSerializer(instance=res).data)
         print(invoice)
         print(invoice.key)
         msg = {'msg': 'صندلی شما رزور شد.', 'amount': invoice.amount, 'pk': invoice.pk,
