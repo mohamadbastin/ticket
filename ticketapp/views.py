@@ -201,8 +201,8 @@ class BuyTicketView(CreateAPIView):
                 # ss = SeatSerializer(instance=s).data
                 pp = ProfileSerializer(instance=profile).data
 
-                return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
-
+                # return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
+                return HttpResponseRedirect('http://google.com/')
                 # return Response({'ticket': {'id': a.pk, 'date': a.date,
                 #                             'seat': {'number': s.number, 'row': s.row.number,
                 #                                      'block': s.row.block.name}, 'profile': pp}})
