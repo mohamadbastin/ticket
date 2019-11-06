@@ -112,6 +112,11 @@ class HallListView(ListAPIView):
                 s.status = 'M'
                 s.save()
 
+        for i in Ticket.objects.all():
+            s = i.ticket.seat
+            s.status = "S"
+            s.save()
+
         return Hall.objects.all()
 
 
