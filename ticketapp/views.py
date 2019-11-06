@@ -1,3 +1,4 @@
+import qrcode
 import requests
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -32,6 +33,35 @@ sn98 = [9830317, 9830339, 9830340, 9830341, 9830342, 9830343, 9830344, 9830345, 
         9832392, 9832393, 9832394, 9832395, 9832396, 9832397, 9832398, 9832399, 9832400, 9832401, 9832402, 9832403,
         9832404, 9833520, 9833521, 9833527, 9833540, 9833548, 9833563, 9833566, 9833567, 9833572, 9833575, 9833583,
         9833584, 9833587, 9833590, 9833591, 9833602, 9833615, 9833644]
+
+
+def qr(profile):
+    # Import QR Code library
+
+    # Create qr code instance
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=40,
+        border=40,
+
+    )
+
+    # The data that you want to store
+    data = str(profile.pk)
+
+    # Add data
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    # Create an image from the QR Code instance
+    img = qr.make_image()
+
+    # Save it somewhere, change the extension as needed:
+    name = "media/qr" + str(profile.pk) + ".png"
+    img.save(name)
+    profile.qr = "http://ticket.moarefe98.ir/" + name
+    profile.save()
 
 
 class ProfileListView(ListAPIView):
@@ -214,6 +244,7 @@ class BuyTicketView(CreateAPIView):
                 b.ticket = a
                 b.is_deleted = True
                 b.save()
+                qr(profile)
 
                 # ss = SeatSerializer(instance=s).data
                 # pp = ProfileSerializer(instance=profile).data
@@ -273,6 +304,7 @@ class BuyTicket2View(CreateAPIView):
                 b.ticket = a
                 b.is_deleted = True
                 b.save()
+                qr(invoice.reservation.profile)
 
                 return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf.html")
 

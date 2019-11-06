@@ -28,7 +28,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField()
     name = models.CharField(max_length=200)
-    qr = models.ImageField(null=True, blank=True)
+    qr = models.CharField(null=True, blank=True, max_length=10000)
 
     # chair = models.ManyToManyField('Seat', through='Ticket')
 
