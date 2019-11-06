@@ -13,22 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-import blog.urls as bu
-from ticket import settings
-from django.conf.urls.static import static
-import ticketapp.urls as tu
-from ticketapp.views import *
-from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView,
 )
 
+import blog.urls as bu
+import ticketapp.urls as tu
+from ticket import settings
+from ticketapp.views import *
 
 urlpatterns = [
+    path('admin/', include('smuggler.urls')),
     path('admin/', admin.site.urls),
     path('blog/', include(bu, )),
     url(r'^api-token-auth/', TokenObtainPairView.as_view()),
@@ -38,3 +38,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
