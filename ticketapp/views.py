@@ -60,6 +60,7 @@ def qr(profile):
     # Save it somewhere, change the extension as needed:
     name = "media/qr" + str(profile.pk) + ".png"
     img.save(name)
+    print(name)
     profile.qr = "http://ticket.moarefe98.ir/" + name
     profile.save()
 
@@ -382,7 +383,7 @@ class TicketListView(ListAPIView):
             a = Ticket.objects.get(profile=profile)
             s = a.seat
             pp = ProfileSerializer(instance=profile).data
-            q = "http://ticket.moarefe98.ir" + pp['qr']
+            q = pp['qr']
             return Response({'ticket': {'id': a.pk, 'date': a.date,
                                         'seat': {'number': s.number, 'row': s.row.number,
                                                  'block': s.row.block.name}, 'profile': pp, 'qr': q}},
