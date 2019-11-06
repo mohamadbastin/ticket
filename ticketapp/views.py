@@ -113,7 +113,7 @@ class HallListView(ListAPIView):
                 s.save()
 
         for i in Ticket.objects.all():
-            s = i.ticket.seat
+            s = i.seat
             s.status = "S"
             s.save()
 
