@@ -350,10 +350,11 @@ class TicketListView(ListAPIView):
             a = Ticket.objects.get(profile=profile)
             s = a.seat
             pp = ProfileSerializer(instance=profile).data
-
+            q = "http://ticket.moarefe98.ir" + pp['qr']
             return Response({'ticket': {'id': a.pk, 'date': a.date,
                                         'seat': {'number': s.number, 'row': s.row.number,
-                                                 'block': s.row.block.name}, 'profile': pp}}, status=status.HTTP_200_OK)
+                                                 'block': s.row.block.name}, 'profile': pp, 'qr': q}},
+                            status=status.HTTP_200_OK)
         except:
             return Response({'msg': 'شما بلیت ندارید.'}, status=status.HTTP_401_UNAUTHORIZED)
 
