@@ -88,7 +88,7 @@ class HallListView(ListAPIView):
         #     c = 0
         res_del = Reservation.objects.filter(is_deleted=False)
         res_act = Reservation.objects.filter(is_deleted=True)
-        res = Reservation.objects.all()
+        # res = Reservation.objects.all()
         for i in res_act:
             # if not i.is_deleted:
             if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
