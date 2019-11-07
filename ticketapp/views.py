@@ -86,30 +86,29 @@ class HallListView(ListAPIView):
         # t = Ticket.objects.filter(profile=profile)
         # if t:
         #     c = 0
-        res_del = Reservation.objects.filter(is_deleted=False)
-        res_act = Reservation.objects.filter(is_deleted=True)
-        # res = Reservation.objects.all()
-        for i in res_act:
-            # if not i.is_deleted:
-            if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
-                print("heree")
-                i.is_deleted = True
-                s = i.seat
-                s.status = 'A'
-                s.save()
-                i.save()
-        for i in res_del:
+
+        res = Reservation.objects.all()
+        for i in res:
+            if not i.is_deleted:
+                if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
+                    print("heree")
+                    i.is_deleted = True
+                    s = i.seat
+                    s.status = 'A'
+                    s.save()
+                    i.save()
+        for i in res:
             if i.ticket == None:
-                # if i.is_deleted:
-                s = i.seat
-                s.status = 'A'
-                s.save()
+                if i.is_deleted:
+                    s = i.seat
+                    s.status = 'A'
+                    s.save()
             else:
                 s = i.seat
                 s.status = "S"
                 s.save()
-        for i in res_act:
-            if i.profile == profile:
+        for i in res:
+            if not i.is_deleted and i.profile == profile:
                 s = i.seat
                 s.status = 'M'
                 s.save()
