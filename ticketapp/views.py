@@ -291,7 +291,7 @@ class BuyTicket2View(CreateAPIView):
         try:
             in_key = self.request.data.get('invoice_key', None)
         except:
-            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
+            return HttpResponseRedirect('http://moarefe98.ir/#/ticket/payment-failed')
         print(self.request.data)
         # print(tk)
         # print(in_key)
@@ -321,12 +321,12 @@ class BuyTicket2View(CreateAPIView):
                 b.save()
                 qr(invoice.reservation.profile)
 
-                return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf")
+                return HttpResponseRedirect("http://moarefe98.ir/#/ticket/ticket-pdf")
 
             else:
-                return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
+                return HttpResponseRedirect('http://moarefe98.ir/#/ticket/payment-failed')
         else:
-            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
+            return HttpResponseRedirect('http://moarefe98.ir/#/ticket/payment-failed')
 
 
 # class CheckPayView(CreateAPIView):
