@@ -86,28 +86,30 @@ class HallListView(ListAPIView):
         # t = Ticket.objects.filter(profile=profile)
         # if t:
         #     c = 0
+        res_del = Reservation.objects.filter(is_deleted=False)
+        res_act = Reservation.objects.filter(is_deleted=True)
         res = Reservation.objects.all()
-        for i in res:
-            if not i.is_deleted:
-                if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
-                    print("heree")
-                    i.is_deleted = True
-                    s = i.seat
-                    s.status = 'A'
-                    s.save()
-                    i.save()
-        for i in res:
+        for i in res_act:
+            # if not i.is_deleted:
+            if timezone.now() - i.res_date_time >= timezone.timedelta(minutes=gap_time):
+                print("heree")
+                i.is_deleted = True
+                s = i.seat
+                s.status = 'A'
+                s.save()
+                i.save()
+        for i in res_del:
             if i.ticket == None:
-                if i.is_deleted:
-                    s = i.seat
-                    s.status = 'A'
-                    s.save()
+                # if i.is_deleted:
+                s = i.seat
+                s.status = 'A'
+                s.save()
             else:
                 s = i.seat
                 s.status = "S"
                 s.save()
-        for i in res:
-            if not i.is_deleted and i.profile == profile:
+        for i in res_act:
+            if i.profile == profile:
                 s = i.seat
                 s.status = 'M'
                 s.save()
@@ -290,7 +292,7 @@ class BuyTicket2View(CreateAPIView):
         try:
             in_key = self.request.data.get('invoice_key', None)
         except:
-            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
+            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
         print(self.request.data)
         # print(tk)
         # print(in_key)

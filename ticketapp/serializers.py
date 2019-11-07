@@ -21,7 +21,7 @@ class SeatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Seat
-        fields = ['pk', 'number', 'title', 'price', 'description', 'ad', 'status']
+        fields = ['pk', 'number', 'price', 'ad', 'status']
 
 
 class RowSerializer(serializers.ModelSerializer):
