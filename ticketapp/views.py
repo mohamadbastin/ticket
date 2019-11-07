@@ -98,7 +98,7 @@ class HallListView(ListAPIView):
                     s.save()
                     i.save()
         for i in res:
-            if i.ticket == None:
+            if i.ticket is None:
                 if i.is_deleted:
                     s = i.seat
                     s.status = 'A'
@@ -321,12 +321,12 @@ class BuyTicket2View(CreateAPIView):
                 b.save()
                 qr(invoice.reservation.profile)
 
-                return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf.html")
+                return HttpResponseRedirect("http://moarefe98.ir/ticket/ticket-pdf")
 
             else:
-                return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
+                return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
         else:
-            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed.html')
+            return HttpResponseRedirect('http://moarefe98.ir/ticket/payment-failed')
 
 
 # class CheckPayView(CreateAPIView):
@@ -415,4 +415,4 @@ class TestView(APIView):
     def post(self, request, *args, **kwargs):
         # tk = self.request.GET.get('token')
 
-        return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf.html')
+        return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf')
