@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 class PostView(ListAPIView):
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-pk')
 
 
 class SponsorView(ListAPIView):
