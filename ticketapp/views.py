@@ -438,3 +438,20 @@ class EnterServiceView(CreateAPIView):
             return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
         print(a.service.first())
         return Response()
+
+
+class ServiceView(CreateAPIView):
+    serializer_class = PkSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        t = Ticket.objects.all()
+        for i in t:
+            p = i.profile
+            s = p.service.all()
+            for j in s:
+                j.delete()
+
+        for i in t:
+            p = i.profile
+            service(p)
