@@ -2,6 +2,8 @@
 
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
+from django.http import HttpResponseRedirect
+
 
 # Create your views here.
 from .serializers import *
@@ -24,3 +26,10 @@ class NumberView(CreateAPIView):
         msg = ' نام صاحب کارت: ' + str(b.owner)
 
         return Response(msg)
+
+
+class ListRedirectView(CreateAPIView):
+    serializer_class = NumberSerializer
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect('http://ticket.moarefe98.ir/media/lockers.pdf')
