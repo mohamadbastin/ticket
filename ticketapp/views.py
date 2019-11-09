@@ -146,7 +146,7 @@ class CheckBought(ListAPIView):
 def get_amount(profile):
     a = profile.student_id
     # print(int(a) in sn98)
-    if int(a) in sn98:
+    if int(a) in sn98 or str(a) in sn98:
         return 'free'
     return Price.objects.get(name='azad').price
 
