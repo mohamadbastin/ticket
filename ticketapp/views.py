@@ -456,7 +456,7 @@ class PixelServiceView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         pk = self.request.data.get('pk')
-        t = self.request.dataget('type')
+        t = self.request.data.get('type')
         try:
             if t == 'q':
                 a = Profile.objects.get(pk=pk)
