@@ -428,5 +428,5 @@ class EnterServiceView(CreateAPIView):
             t = Ticket.objects.get(profile=a)
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
-        print(a.service)
+        print(a.service.first())
         return Response()
