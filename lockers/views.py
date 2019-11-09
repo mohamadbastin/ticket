@@ -13,7 +13,7 @@ class CartViewList(ListAPIView):
 
 
 class NumberView(CreateAPIView):
-    serializer_class = CartSerializer
+    serializer_class = NumberSerializer
 
     def post(self, request, *args, **kwargs):
         a = self.request.data.get('number')
