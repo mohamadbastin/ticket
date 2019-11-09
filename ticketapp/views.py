@@ -357,6 +357,9 @@ class SignupView(CreateAPIView):
         # major = Major.objects.get(pk=major)
         phone = data.get('phone', None)
 
+        if str(name).isdigit():
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             passw = "arghavan" + str(national_id)[-3:]
             temp_user = User.objects.create(username=student_id, )
