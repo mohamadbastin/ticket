@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 
 
 # Create your views here.
+from rest_framework.views import APIView
+
 from .serializers import *
 
 
@@ -28,8 +30,8 @@ class NumberView(CreateAPIView):
         return Response(msg)
 
 
-class ListRedirectView(CreateAPIView):
+class ListRedirectView(APIView):
     serializer_class = NumberSerializer
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         return HttpResponseRedirect('http://ticket.moarefe98.ir/media/lockers.pdf')
