@@ -434,11 +434,16 @@ class EnterServiceView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         pk = self.request.data.get('pk')
+        t = self.request.data.get('type')
         try:
-            a = Profile.objects.get(pk=pk)
-            t = Ticket.objects.get(profile=a)
+            if t == 'q':
+                a = Profile.objects.get(pk=pk)
+                t = Ticket.objects.get(profile=a)
+            else:
+                a = Profile.objects.get(student_id=pk)
+                t = Ticket.objects.get(profile=a)
         except:
-            return Response({'بلیت پیدا نشد!'}, status=status.HTTP_404_NOT_FOUND)
+            return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
         print(a.service.first())
         s = a.service.get(name='enter')
         if not s.is_used:
@@ -483,9 +488,14 @@ class FoodServiceView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         pk = self.request.data.get('pk')
+        t = self.request.data.get('type')
         try:
-            a = Profile.objects.get(pk=pk)
-            t = Ticket.objects.get(profile=a)
+            if t == 'q':
+                a = Profile.objects.get(pk=pk)
+                t = Ticket.objects.get(profile=a)
+            else:
+                a = Profile.objects.get(student_id=pk)
+                t = Ticket.objects.get(profile=a)
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
         print(a.service.first())
