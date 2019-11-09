@@ -21,6 +21,6 @@ class NumberView(CreateAPIView):
             b = Cart.objects.get(number=a)
         except:
             return Response('کارتی با این مشحصات وجود ندارد! دوباره امتحان کنید.')
-        msg = ' نام صاحب کارت: ' + str(a.owner)
+        msg = ' نام صاحب کارت: ' + str(b.owner)
 
         return Response(msg)
