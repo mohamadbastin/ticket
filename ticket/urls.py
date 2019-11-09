@@ -24,6 +24,7 @@ from rest_framework_simplejwt.views import (
 
 import blog.urls as bu
 import ticketapp.urls as tu
+import lockers.urls as lu
 from ticket import settings
 from ticketapp.views import *
 
@@ -31,6 +32,7 @@ urlpatterns = [
     path('admin/', include('smuggler.urls')),
     path('admin/', admin.site.urls),
     path('blog/', include(bu, )),
+    path('lockers/', include(lu, )),
     url(r'^api-token-auth/', TokenObtainPairView.as_view()),
     path('ticket/', include(tu)),
 ]
