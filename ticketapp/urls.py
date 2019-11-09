@@ -6,9 +6,7 @@ from .views import *
 urlpatterns = [
     path('profile/', ProfileListView.as_view()),
     path('hall/', HallListView.as_view()),
-
     path('buy/', BuyTicketView.as_view()),
-
     path('check/', CheckBought.as_view()),
     path('reserve/', SeatReserveView.as_view()),
     path('majors/', MajorListView.as_view()),
