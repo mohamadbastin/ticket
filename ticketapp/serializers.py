@@ -74,3 +74,9 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
+
+
+class PkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['pk']

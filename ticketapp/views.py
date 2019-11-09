@@ -416,3 +416,17 @@ class TestView(APIView):
         # tk = self.request.GET.get('token')
 
         return HttpResponseRedirect('http://moarefe98.ir/ticket/ticket-pdf')
+
+
+class EnterServiceView(CreateAPIView):
+    serializer_class = PkSerializer
+
+    def post(self, request, *args, **kwargs):
+        pk = self.request.data.get('pk')
+        try:
+            a = Profile.objects.get(pk=pk)
+            t = Ticket.objects.get(profile=a)
+        except:
+            return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
+        print(a.service)
+        return Response()

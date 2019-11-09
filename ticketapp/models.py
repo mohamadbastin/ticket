@@ -6,6 +6,7 @@ from django.db import models
 
 class Service(models.Model):
     name = models.CharField(max_length=256)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='service')
 
     def __str__(self):
         return self.name
@@ -170,6 +171,7 @@ class Terminal(models.Model):
     name = models.CharField(max_length=50)
     api_key = models.CharField(max_length=1000)
     token = models.CharField(max_length=100000, null=True, blank=True)
+
     # boz = models.IntegerField()
 
     def __str__(self):
@@ -209,7 +211,7 @@ class Invoice(models.Model):
 
 class Reservation(models.Model):
     # class Meta:
-        # unique_together = ['seat', 'profile', ]
+    # unique_together = ['seat', 'profile', ]
 
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reservation_owned')
