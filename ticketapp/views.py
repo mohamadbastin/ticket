@@ -65,6 +65,12 @@ def qr(profile):
     profile.save()
 
 
+def service(p):
+    l = ['food', 'enter', 'pixel']
+    for i in l:
+        Service.objects.create(name=i, profile=p)
+
+
 class ProfileListView(ListAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -260,6 +266,7 @@ class BuyTicketView(CreateAPIView):
                 b.is_deleted = True
                 b.save()
                 qr(profile)
+                service(profile)
 
                 # ss = SeatSerializer(instance=s).data
                 # pp = ProfileSerializer(instance=profile).data
@@ -320,6 +327,7 @@ class BuyTicket2View(CreateAPIView):
                 b.is_deleted = True
                 b.save()
                 qr(invoice.reservation.profile)
+                service(invoice.reservation.profile)
 
                 return HttpResponseRedirect("http://moarefe98.ir/#/ticket/ticket-pdf")
 

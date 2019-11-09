@@ -7,6 +7,7 @@ from django.db import models
 class Service(models.Model):
     name = models.CharField(max_length=256)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='service')
+    is_used = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
