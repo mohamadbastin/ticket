@@ -437,7 +437,15 @@ class EnterServiceView(CreateAPIView):
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
         print(a.service.first())
-        return Response()
+        s = a.service.get(name='enter')
+        if not s.is_used:
+            s.is_used = True
+            s.save()
+            msg = {'msg': 'ورود ثبت شد.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_200_OK)
+        if s.is_used:
+            msg = {'msg': 'ورود قبلا استفاده شده.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class ServiceView(CreateAPIView):
