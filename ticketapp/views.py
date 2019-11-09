@@ -435,7 +435,7 @@ class EnterServiceView(CreateAPIView):
             a = Profile.objects.get(pk=pk)
             t = Ticket.objects.get(profile=a)
         except:
-            return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
+            return Response({'بلیت پیدا نشد!'}, status=status.HTTP_404_NOT_FOUND)
         print(a.service.first())
         s = a.service.get(name='enter')
         if not s.is_used:
@@ -445,6 +445,55 @@ class EnterServiceView(CreateAPIView):
             return Response(msg, status=status.HTTP_200_OK)
         if s.is_used:
             msg = {'msg': 'ورود قبلا استفاده شده.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class PixelServiceView(CreateAPIView):
+    serializer_class = PkSerializer
+
+    def post(self, request, *args, **kwargs):
+        pk = self.request.data.get('pk')
+        t = self.request.dataget('type')
+        try:
+            if t == 'q':
+                a = Profile.objects.get(pk=pk)
+                t = Ticket.objects.get(profile=a)
+            else:
+                a = Profile.objects.get(student_id=pk)
+                t = Ticket.objects.get(profile=a)
+        except:
+            return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
+        print(a.service.first())
+        s = a.service.get(name='enter')
+        if not s.is_used:
+            s.is_used = True
+            s.save()
+            msg = {'msg': 'پیکسل ثبت شد.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_200_OK)
+        if s.is_used:
+            msg = {'msg': 'پیکسل قبلا استفاده شده.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class FoodServiceView(CreateAPIView):
+    serializer_class = PkSerializer
+
+    def post(self, request, *args, **kwargs):
+        pk = self.request.data.get('pk')
+        try:
+            a = Profile.objects.get(pk=pk)
+            t = Ticket.objects.get(profile=a)
+        except:
+            return Response('بلیت پیدا نشد!', status=status.HTTP_404_NOT_FOUND)
+        print(a.service.first())
+        s = a.service.get(name='food')
+        if not s.is_used:
+            s.is_used = True
+            s.save()
+            msg = {'msg': 'پذیزایی ثبت شد.', 'profile': {'name': a.name, 'student_id': a.student_id}}
+            return Response(msg, status=status.HTTP_200_OK)
+        if s.is_used:
+            msg = {'msg': 'پذیرایی قبلا استفاده شده.', 'profile': {'name': a.name, 'student_id': a.student_id}}
             return Response(msg, status=status.HTTP_401_UNAUTHORIZED)
 
 

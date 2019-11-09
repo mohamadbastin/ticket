@@ -78,4 +78,4 @@ class ReservationSerializer(serializers.ModelSerializer):
 
 class PkSerializer(serializers.Serializer):
     class Meta:
-        fields = ['pk']
+        fields = ['pk', 'type']

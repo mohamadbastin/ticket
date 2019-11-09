@@ -16,6 +16,8 @@ urlpatterns = [
     path('test/', TestView.as_view()),
     path('payment/gateway/callback/', BuyTicket2View.as_view()),
     path('qr/enter/', EnterServiceView.as_view()),
+    path('qr/food/', FoodServiceView.as_view()),
+    path('qr/pixel/', PixelServiceView.as_view()),
     path('serv/', ServiceView.as_view())
 
 ]
