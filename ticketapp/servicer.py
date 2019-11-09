@@ -1,4 +1,4 @@
-from ticketapp.models import *
+from ticketapp.models import Service, Ticket
 
 
 def service(p):
@@ -13,7 +13,6 @@ for i in t:
     s = p.service.all()
     for j in s:
         j.delete()
-
 
 for i in t:
     p = i.profile
