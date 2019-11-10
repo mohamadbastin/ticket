@@ -444,7 +444,7 @@ class EnterServiceView(CreateAPIView):
             else:
                 print('ounja')
                 a = Profile.objects.get(student_id=pk)
-        except:
+        except Profile.DoesNotExist:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
         s = a.service.get(name='enter')
@@ -473,7 +473,7 @@ class PixelServiceView(CreateAPIView):
             else:
                 print('ounja')
                 a = Profile.objects.get(student_id=pk)
-        except:
+        except Profile.DoesNotExist:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
         s = a.service.get(name='enter')
@@ -504,7 +504,7 @@ class FoodServiceView(CreateAPIView):
                 print('ounja')
                 a = Profile.objects.get(student_id=pk)
 
-        except:
+        except Profile.DoesNotExist:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
         s = a.service.get(name='food')
