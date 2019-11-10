@@ -10,7 +10,7 @@ class Service(models.Model):
     is_used = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.name + ' ' + str(self.profile.name) + ' ' + str(self.is_used)
 
 
 class Major(models.Model):
