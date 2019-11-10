@@ -476,7 +476,7 @@ class PixelServiceView(CreateAPIView):
         except Profile.DoesNotExist:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
-        s = a.service.get(name='enter')
+        s = a.service.get(name='pixel')
         if not s.is_used:
             s.is_used = True
             s.save()
