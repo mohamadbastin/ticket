@@ -436,13 +436,14 @@ class EnterServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
-            print(t)
+            print(pk, t)
             if t == 'q':
+                print('inja')
                 a = Profile.objects.get(pk=pk)
-                ti = Ticket.objects.get(profile=a)
+                print(a)
             else:
+                print('ounja')
                 a = Profile.objects.get(student_id=pk)
-                ti = Ticket.objects.get(profile=a)
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
@@ -464,13 +465,14 @@ class PixelServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
-            print(t)
+            print(pk, t)
             if t == 'q':
+                print('inja')
                 a = Profile.objects.get(pk=pk)
-                t = Ticket.objects.get(profile=a)
+                print(a)
             else:
+                print('ounja')
                 a = Profile.objects.get(student_id=pk)
-                t = Ticket.objects.get(profile=a)
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
@@ -492,12 +494,16 @@ class FoodServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
+            print(pk, t)
             if t == 'q':
+                print('inja')
                 a = Profile.objects.get(pk=pk)
-                t = Ticket.objects.get(profile=a)
+                print(a)
+
             else:
+                print('ounja')
                 a = Profile.objects.get(student_id=pk)
-                t = Ticket.objects.get(profile=a)
+
         except:
             return Response('بلیت پیدا نشد!', status=status.HTTP_409_CONFLICT)
         print(a.service.first())
