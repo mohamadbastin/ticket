@@ -436,7 +436,7 @@ class EnterServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
-            print(pk, t)
+            print('pk:', pk, 't:', t)
             if t == 'q':
                 print('inja')
                 a = Profile.objects.get(pk=pk)
@@ -465,7 +465,7 @@ class PixelServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
-            print(pk, t)
+            print('pk:', pk, 't:', t)
             if t == 'q':
                 print('inja')
                 a = Profile.objects.get(pk=pk)
@@ -494,7 +494,7 @@ class FoodServiceView(CreateAPIView):
         pk = self.request.data.get('pk')
         t = self.request.data.get('type')
         try:
-            print(pk, t)
+            print('pk:', pk, 't:', t)
             if t == 'q':
                 print('inja')
                 a = Profile.objects.get(pk=pk)
